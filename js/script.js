@@ -25,58 +25,42 @@ function computerPlay() {
 };
 
 // Evaluate game result by comparing each possible combination of moves.
-// Declare the winner.
+// Declare the winner of each round.
 
 function playRound(playerSelection, computerSelection) {
     let playerMove = playerSelection.toLowerCase();
     let computerMove = computerSelection.toLowerCase();
     let winner = "";
 
-    if (playerMove === "rock" && computerMove === "rock") {
+    if (playerMove === computerMove) {
         declareTie(playerMove);
         winner = "none";
-    } else if (playerMove === "rock" && computerMove === "paper") {
-        declareComputerAsWinner(playerMove, computerMove);
-        winner = "computer";
-    } else if (playerMove === "rock" && computerMove === "scissors") {
+    } else if ((playerMove === "rock" && computerMove === "scissors") ||
+        (playerMove === "paper" && computerMove === "rock") ||
+        (playerMove === "scissors" && computerMove === "paper")) {
         declarePlayerAsWinner(playerMove, computerMove);
         winner = "player";
-    } else if (playerMove === "paper" && computerMove === "rock") {
-        declarePlayerAsWinner(playerMove, computerMove);
-        winner = "player";
-    } else if (playerMove === "paper" && computerMove === "paper") {
-        declareTie(playerMove);
-        winner = "none";
-    } else if (playerMove === "paper" && computerMove === "scissors") {
+    } else {
         declareComputerAsWinner(playerMove, computerMove);
         winner = "computer";
-    } else if (playerMove === "scissors" && computerMove === "rock") {
-        declareComputerAsWinner(playerMove, computerMove);
-        winner = "computer";
-    } else if (playerMove === "scissors" && computerMove === "paper") {
-        declarePlayerAsWinner(playerMove, computerMove);
-        winner = "player";
-    } else if (playerMove === "scissors" && computerMove === "scissors") {
-        declareTie(playerMove);
-        winner = "none";
     };
 
     return winner;
 };
 
 function declarePlayerAsWinner(playerMove, computerMove) {
-    console.log(`You win! ${makeUppercase(playerMove)} beats ${makeUppercase(computerMove)}.`);
+    console.log(`You win! ${capitalize(playerMove)} beats ${capitalize(computerMove)}.`);
 };
 
 function declareComputerAsWinner(playerMove, computerMove) {
-    console.log(`You loose! ${makeUppercase(computerMove)} beats ${makeUppercase(playerMove)}.`);
+    console.log(`You loose! ${capitalize(computerMove)} beats ${capitalize(playerMove)}.`);
 };
 
 function declareTie(playerMove) {
-    console.log(`It is a tie! Both have ${makeUppercase(playerMove)}.`);
+    console.log(`It is a tie! Both have ${capitalize(playerMove)}.`);
 };
 
-function makeUppercase(move) {
+function capitalize(move) {
     return move.replace(move[0], move[0].toUpperCase());
 };
 
@@ -99,7 +83,7 @@ function game() {
             counterTies++;
         };
     };
-    
+
     if (counterPlayer > counterComputer) {
         console.log(`You have won ${counterPlayer} out of 5 rounds including ${counterTies} ties. Therefore you are the winner!`);
     } else if (counterPlayer < counterComputer) {
