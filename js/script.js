@@ -30,48 +30,83 @@ function computerPlay() {
 function playRound(playerSelection, computerSelection) {
     let playerMove = playerSelection.toLowerCase();
     let computerMove = computerSelection.toLowerCase();
-    let result = "";
+    let winner = "";
 
     if (playerMove === "rock" && computerMove === "rock") {
-        result = declareTie(playerMove);
+        declareTie(playerMove);
+        winner = "none";
     } else if (playerMove === "rock" && computerMove === "paper") {
-        result = declareComputerAsWinner(playerMove, computerMove);
+        declareComputerAsWinner(playerMove, computerMove);
+        winner = "computer";
     } else if (playerMove === "rock" && computerMove === "scissors") {
-        result = declarePlayerAsWinner(playerMove, computerMove);
+        declarePlayerAsWinner(playerMove, computerMove);
+        winner = "player";
     } else if (playerMove === "paper" && computerMove === "rock") {
-        result = declarePlayerAsWinner(playerMove, computerMove);
+        declarePlayerAsWinner(playerMove, computerMove);
+        winner = "player";
     } else if (playerMove === "paper" && computerMove === "paper") {
-        result = declareTie(playerMove);
+        declareTie(playerMove);
+        winner = "none";
     } else if (playerMove === "paper" && computerMove === "scissors") {
-        result = declareComputerAsWinner(playerMove, computerMove);
+        declareComputerAsWinner(playerMove, computerMove);
+        winner = "computer";
     } else if (playerMove === "scissors" && computerMove === "rock") {
-        result = declareComputerAsWinner(playerMove, computerMove);
+        declareComputerAsWinner(playerMove, computerMove);
+        winner = "computer";
     } else if (playerMove === "scissors" && computerMove === "paper") {
-        result = declarePlayerAsWinner(playerMove, computerMove);
+        declarePlayerAsWinner(playerMove, computerMove);
+        winner = "player";
     } else if (playerMove === "scissors" && computerMove === "scissors") {
-        result = declareTie(playerMove);
+        declareTie(playerMove);
+        winner = "none";
     };
 
-    return result;
+    return winner;
 };
 
 function declarePlayerAsWinner(playerMove, computerMove) {
-    return `You win! ${makeUppercase(playerMove)} beats ${makeUppercase(computerMove)}.`;
+    console.log(`You win! ${makeUppercase(playerMove)} beats ${makeUppercase(computerMove)}.`);
 };
 
 function declareComputerAsWinner(playerMove, computerMove) {
-    return `You loose! ${makeUppercase(computerMove)} beats ${makeUppercase(playerMove)}.`;
+    console.log(`You loose! ${makeUppercase(computerMove)} beats ${makeUppercase(playerMove)}.`);
 };
 
 function declareTie(playerMove) {
-    return `It is a tie! Both have ${makeUppercase(playerMove)}.`;
+    console.log(`It is a tie! Both have ${makeUppercase(playerMove)}.`);
 };
 
 function makeUppercase(move) {
     return move.replace(move[0], move[0].toUpperCase());
 };
 
-const playerSelection = "rock";
-const computerSelection = computerPlay();
+// Play five rounds and keep score of each round. Declare overall winner.
 
-console.log(playRound(playerSelection, computerSelection));
+function game() {
+    let counterPlayer = 0;
+    let counterComputer = 0;
+    let counterTies = 0;
+
+    for (let i = 0; i < 5; i++) {
+        let playerSelection = prompt("Which move do you want to play?");
+        let winner = playRound(playerSelection, computerPlay());
+
+        if (winner === "player") {
+            counterPlayer++;
+        } else if (winner === "computer") {
+            counterComputer++;
+        } else {
+            counterTies++;
+        };
+    };
+    
+    if (counterPlayer > counterComputer) {
+        console.log(`You have won ${counterPlayer} out of 5 rounds including ${counterTies} ties. Therefore you are the winner!`);
+    } else if (counterPlayer < counterComputer) {
+        console.log(`You have lost ${counterComputer} out of 5 rounds including ${counterTies} ties. Therefore you are the loser!`);
+    } else {
+        console.log(`Both have won ${counterPlayer} times including ${counterTies} ties. Therefore nobody wins!`);
+    }
+}
+
+game();
