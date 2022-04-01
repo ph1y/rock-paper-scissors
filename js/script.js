@@ -1,6 +1,4 @@
-// Computer randomly selects rock, paper or scissors.
-// Create random number that maps to one of the play moves.
-// Store move in variable and return it.
+/* Let the computer play a round. */
 
 function computerPlay() {
     let randomNumber = Math.floor((Math.random() * 3));
@@ -8,89 +6,82 @@ function computerPlay() {
 
     switch (randomNumber) {
         case 0:
-            move = "Rock";
+            move = "rock";
             break;
         case 1:
-            move = "Paper";
+            move = "paper";
             break;
         case 2:
-            move = "Scissors";
+            move = "scissors";
             break;
         default:
-            move = "I do not feel like playing.";
+            move = "nothing";
             break;
     };
 
     return move;
 };
 
-// Evaluate game result by comparing each possible combination of moves.
-// Declare the winner of each round.
+/* Evaluate and display the scores. */
 
-function playRound(playerSelection, computerSelection) {
-    let playerMove = playerSelection.toLowerCase();
-    let computerMove = computerSelection.toLowerCase();
+let playerCounter = 0;
+let computerCounter = 0;
+
+function updateScore(winner) {
+    if (winner === "player") {
+        playerCounter += 1;
+    } else if (winner === "computer") {
+        computerCounter += 1;
+    };
+
+    let playerDiv = document.querySelector(".player-counter");
+    let computerDiv = document.querySelector(".computer-counter");
+
+    playerDiv.textContent = playerCounter;
+    computerDiv.textContent = computerCounter;
+};
+
+/* Evaluate game result by comparing each possible combination of moves and display the result. */
+
+function playRound(event) {
+    let playerSelection = event.target.className;
+    let computerSelection = computerPlay();
     let winner = "";
 
-    if (playerMove === computerMove) {
-        declareTie(playerMove);
+    if (playerSelection === computerSelection) {
+        declareTie(playerSelection);
         winner = "none";
-    } else if ((playerMove === "rock" && computerMove === "scissors") ||
-        (playerMove === "paper" && computerMove === "rock") ||
-        (playerMove === "scissors" && computerMove === "paper")) {
-        declarePlayerAsWinner(playerMove, computerMove);
+    } else if ((playerSelection === "rock" && computerSelection === "scissors") ||
+        (playerSelection === "paper" && computerSelection === "rock") ||
+        (playerSelection === "scissors" && computerSelection === "paper")) {
+        declarePlayerAsWinner(playerSelection, computerSelection);
         winner = "player";
     } else {
-        declareComputerAsWinner(playerMove, computerMove);
+        declareComputerAsWinner(playerSelection, computerSelection);
         winner = "computer";
     };
 
-    return winner;
+    updateScore(winner);
 };
 
-function declarePlayerAsWinner(playerMove, computerMove) {
-    console.log(`You win! ${capitalize(playerMove)} beats ${capitalize(computerMove)}.`);
+function declarePlayerAsWinner(playerSelection, computerSelection) {
+    let div = document.querySelector(".result");
+    div.textContent = `You win! ${capitalize(playerSelection)} beats ${capitalize(computerSelection)}.`;
 };
 
-function declareComputerAsWinner(playerMove, computerMove) {
-    console.log(`You loose! ${capitalize(computerMove)} beats ${capitalize(playerMove)}.`);
+function declareComputerAsWinner(playerSelection, computerSelection) {
+    let div = document.querySelector(".result");
+    div.textContent = `You loose! ${capitalize(computerSelection)} beats ${capitalize(playerSelection)}.`;
 };
 
-function declareTie(playerMove) {
-    console.log(`It is a tie! Both have ${capitalize(playerMove)}.`);
+function declareTie(playerSelection) {
+    let div = document.querySelector(".result");
+    div.textContent = `It is a tie! Both have ${capitalize(playerSelection)}.`;
 };
 
-function capitalize(move) {
-    return move.replace(move[0], move[0].toUpperCase());
+function capitalize(selection) {
+    return selection.replace(selection[0], selection[0].toUpperCase());
 };
 
-// Play five rounds and keep score of each round. Declare overall winner.
-
-function game() {
-    let counterPlayer = 0;
-    let counterComputer = 0;
-    let counterTies = 0;
-
-    for (let i = 0; i < 5; i++) {
-        let playerSelection = prompt("Which move do you want to play?");
-        let winner = playRound(playerSelection, computerPlay());
-
-        if (winner === "player") {
-            counterPlayer++;
-        } else if (winner === "computer") {
-            counterComputer++;
-        } else {
-            counterTies++;
-        };
-    };
-
-    if (counterPlayer > counterComputer) {
-        console.log(`You have won ${counterPlayer} out of 5 rounds including ${counterTies} ties. Therefore you are the winner!`);
-    } else if (counterPlayer < counterComputer) {
-        console.log(`You have lost ${counterComputer} out of 5 rounds including ${counterTies} ties. Therefore you are the loser!`);
-    } else {
-        console.log(`Both have won ${counterPlayer} times including ${counterTies} ties. Therefore nobody wins!`);
-    }
-}
-
-game();
+const buttons = document.querySelectorAll("button");
+buttons.forEach(button => button.addEventListener("click", playRound));
