@@ -27,6 +27,12 @@ function computerPlay() {
 let playerCounter = 0;
 let computerCounter = 0;
 
+let playerDiv = document.querySelector(".player-counter");
+let computerDiv = document.querySelector(".computer-counter");
+
+playerDiv.textContent = `Player: ${playerCounter}`;
+computerDiv.textContent = `Computer: ${computerCounter}`;
+
 function updateScore(winner) {
     if (winner === "player") {
         playerCounter += 1;
@@ -34,12 +40,17 @@ function updateScore(winner) {
         computerCounter += 1;
     };
 
-    let playerDiv = document.querySelector(".player-counter");
-    let computerDiv = document.querySelector(".computer-counter");
+    playerDiv.textContent = `Player: ${playerCounter}`;
+    computerDiv.textContent = `Computer: ${computerCounter}`;
 
-    playerDiv.textContent = playerCounter;
-    computerDiv.textContent = computerCounter;
+    if (playerCounter === 5 || computerCounter === 5) {
+        declareGameWinner(winner);
+    }
 };
+
+function declareGameWinner(winner) {
+    alert(`${capitalize(winner)} wins the game!`);
+}
 
 /* Evaluate game result by comparing each possible combination of moves and display the result. */
 
